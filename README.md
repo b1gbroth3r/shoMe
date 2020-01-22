@@ -1,8 +1,8 @@
 # shoMe
 A Python script that queries a list of IPs and returns useful or interesting information (for externals/webapps)
-Example:
+Example:\n
  ```python3 shoMe.py <file_of_IPs> <output_file>```
 
-Upcoming Additions:
-	- Additional webservers to look for
-	- Possible threading support
+Upcoming Additions:\n
+	* Additional webservers to look for
+	* Possible threading support
