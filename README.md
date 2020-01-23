@@ -1,4 +1,4 @@
-## shoMe
+# shoMe
 Shoutout to @blurbdust for the idea and core code for this script!
 A Python script that queries a list of IPs and returns useful or interesting information (for externals/webapps).
 
