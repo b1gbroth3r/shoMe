@@ -1,8 +1,8 @@
-# Shoutout to @blurbdust for doing most of the legwork on this
 import shodan
 import textwrap
 import re
 from sys import *
+from ipaddress import IPv4Network
 
 API_KEY = "ENTER API KEY HERE"
 HIGH_PROFILE_PORTS = [21, 22, 23, 389, 445, 1443, 3306, 3389, 5432, 5432, 27017]
@@ -98,3 +98,4 @@ def shoMe(infile, outfile):
 
 if __name__ == '__main__':
     shoMe(argv[1], argv[2])
+    # ArgParse stuff coming soon
