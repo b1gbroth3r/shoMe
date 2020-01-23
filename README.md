@@ -33,3 +33,4 @@ __Upcoming Additions__:
 	- [ ] Edge case for Node.js
 - [ ] Possible threading support
 - [ ] Write output to structured file to organize data into tables
+- [ ] Support for CIDR notation
