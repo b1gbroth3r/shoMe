@@ -4,7 +4,7 @@ import textwrap
 import re
 from sys import *
 
-API_KEY = "RQhDB2DxLaB9FnRtL00h7DXisxJ2LaKF"
+API_KEY = "ENTER API KEY HERE"
 HIGH_PROFILE_PORTS = [21, 22, 23, 389, 445, 1443, 3306, 3389, 5432, 5432, 27017]
 INTERESTING_TARGETS = []
 
