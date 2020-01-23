@@ -1,9 +1,10 @@
 # Shoutout to @blurbdust for doing most of the legwork on this
 import shodan
 import textwrap
+import re
 from sys import *
 
-API_KEY = "ENTER YOUR API KEY HERE"
+API_KEY = "RQhDB2DxLaB9FnRtL00h7DXisxJ2LaKF"
 HIGH_PROFILE_PORTS = [21, 22, 23, 389, 445, 1443, 3306, 3389, 5432, 5432, 27017]
 INTERESTING_TARGETS = []
 
@@ -31,24 +32,42 @@ def shoMe(infile, outfile):
     ip_port_list = []
     webserver_list = []
     vulns_list = []
+    api = shodan.Shodan(API_KEY)
     with open(infile, "r") as ips:
         with open(outfile, "w") as out:
             for ip in ips:
-                api = shodan.Shodan(API_KEY)
                 ret = "IP: "
                 try:
                     info = api.host(ip, history=False)
                 except:
                     continue
                 for x in info["data"]:
+                    if ("Server: Apache/" in x["data"]):
+                        #print(str(x["data"]))
+                        tmp= str(x["data"]).split("Server: Apache/")[1].split("\n")[0].replace("/", "").replace("\r", "")[0:14]
+                        apache_result = "IP: {}; Apache Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
+                        webserver_list.append(apache_result)
+                    if ("Server: nginx/" in x["data"]):
+                        tmp = str(x["data"]).split("Server: nginx/")[1].split("\n")[0].replace("/", "").replace("\r", "")
+                        nginx_result = "IP: {}; Nginx Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
+                        webserver_list.append(nginx_result)
                     if ("Server: Microsoft-IIS" in x["data"]):
                         tmp = str(x["data"]).split("Server: Microsoft-IIS")[1].split("\n")[0].replace("/", "").replace("\r", "")
-                        iis_result = "IP: {}; IIS-Version: {} ".format(x['ip_str'], tmp)
+                        iis_result = "IP: {}; IIS-Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
                         webserver_list.append(iis_result)
                     if ("X-Powered-By: PHP" in x['data']):
-                        tmp = str(x["data"]).split("X-Powered-By: PHP")[1].split("\n")[0].replace("/", "").replace("\r", "")
-                        php_result = "IP: {}; PHP Version: {} ".format(x['ip_str'], tmp)
+                        tmp = str(x["data"]).split("X-Powered-By: PHP")[1].split("\n")[0].replace("/", "").replace("\r", "")[0:6]
+                        php_result = "IP: {}; PHP Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
                         webserver_list.append(php_result)
+                    if ("Server: Apache-Coyote/" in x["data"]):
+                        tmp = str(x["data"]).split("Server: Apache-Coyote/")[1].split("\n")[0].replace("/", "").replace("\r", "")
+                        tomcat_result = "IP: {}; Coyote Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
+                        webserver_list.append(tomcat_result)
+                    if ("Server: lighttpd/" in x["data"]):
+                        tmp = str(x["data"]).split("Server: lighttpd/")[1].split("\n")[0].replace("/", "").replace("\r", "")
+                        lighttpd_result = "IP: {}; Lighttpd Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
+                        webserver_list.append(lighttpd_result)
+                    # Node.js is a bit of an edge case in the way it formats header data. Will have added soon
                     if ("vulns" in x.keys()):
                         tmp = x['vulns']
                         for k,v in tmp.items():
@@ -66,6 +85,10 @@ def shoMe(infile, outfile):
                     ip_port_info = ret[:-2]
                     ip_port_list.append(ip_port_info)
                     info = None
+
+            ip_port_list.sort()
+            webserver_list.sort()
+            vulns_list.sort()
             output_ip_port(out, ip_port_list)
             output_webserver(out, webserver_list)
             output_vulns(out, vulns_list)
