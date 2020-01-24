@@ -1,6 +1,7 @@
 import shodan
 import textwrap
 import re
+import argparse
 from sys import *
 from ipaddress import IPv4Network
 
@@ -28,7 +29,7 @@ def output_vulns(outfile, lyst):
         outfile.write(vuln + "\n")
     outfile.write("#" * 70 + "\n")
 
-def shoMe(infile, outfile):
+def shoMe(option=None, infile, outfile):
     ip_port_list = []
     webserver_list = []
     vulns_list = []
@@ -99,3 +100,12 @@ def shoMe(infile, outfile):
 if __name__ == '__main__':
     shoMe(argv[1], argv[2])
     # ArgParse stuff coming soon
+    parser = argparse.ArgumentParser(add_help=True, description='A script for querying Shodan\'s API for interesting information useful for web application and external pentests', formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument('IP_file', help='A file of IP addresses you want to search Shodan for')
+    parser.add_argument('--output', help='The name of the output file to write results to')
+    parser.add_argument('--history', help='Shodan records a complete history of information on a given IP address. This flag enables the history to be gathered as well as current data')
+    parser.add_argument('-a', '--all', help='')
+    parser.add_argument('--vulns', help=)
+    parser.add_argument('', help=)
+
+    args = parser.parse_args()
