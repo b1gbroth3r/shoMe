@@ -6,7 +6,8 @@ from sys import *
 from ipaddress import IPv4Network
 
 API_KEY = "37jXCZTLfXi0SCEYfMI0Dlfq2S3kBIXg"
-HIGH_PROFILE_PORTS = [21, 22, 23, 161, 389, 445, 623, 1443, 3306, 3389, 5432, 5432, 5900, 27017]
+HIGH_PROFILE_PORTS = [20, 21, 22, 23, 88, 107, 115, 137, 139, 161, 389, 445, 623, 1443, 3306, 3389, 5432, 5432, 5900, 
+                      27017]
 INTERESTING_TARGETS = []
 
 def output_ip_port(outfile, lyst):
@@ -19,7 +20,6 @@ def output_ip_port(outfile, lyst):
 def output_webserver(outfile, lyst):
     outfile.write("Web server information listed here: \n")
     for webserv in lyst:
-        #print(webserv)
         outfile.write(webserv + "\n")
     outfile.write("#" * 70 + "\n")
 
