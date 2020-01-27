@@ -29,8 +29,8 @@ IP: 2.2.2.2; Port 22
  ```
 
 __Upcoming Additions__:
-- [ ] Additional webservers to look for
-	- [ ] Edge case for Node.js
+- [x] Additional webservers to look for
+	~~- [ ] Edge case for Node.js~~
 - [ ] Possible threading support
 - [ ] Write output to structured file to organize data into tables
 - [ ] Support for CIDR notation
