@@ -5,7 +5,7 @@ import argparse
 from sys import *
 from ipaddress import IPv4Network
 
-API_KEY = "37jXCZTLfXi0SCEYfMI0Dlfq2S3kBIXg"
+API_KEY = "ENTER API KEY HERE"
 HIGH_PROFILE_PORTS = [20, 21, 22, 23, 88, 107, 115, 137, 139, 161, 389, 445, 623, 1443, 3306, 3389, 5432, 5432, 5900, 
                       27017]
 INTERESTING_TARGETS = []
@@ -106,3 +106,4 @@ def shoMe(infile, outfile):
 if __name__ == '__main__':
     shoMe(argv[1], argv[2])
     # ArgParse stuff coming soon
+
