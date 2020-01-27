@@ -5,8 +5,8 @@ import argparse
 from sys import *
 from ipaddress import IPv4Network
 
-API_KEY = "ENTER API KEY HERE"
-HIGH_PROFILE_PORTS = [21, 22, 23, 389, 445, 1443, 3306, 3389, 5432, 5432, 27017]
+API_KEY = "37jXCZTLfXi0SCEYfMI0Dlfq2S3kBIXg"
+HIGH_PROFILE_PORTS = [21, 22, 23, 161, 389, 445, 623, 1443, 3306, 3389, 5432, 5432, 5900, 27017]
 INTERESTING_TARGETS = []
 
 def output_ip_port(outfile, lyst):
@@ -29,7 +29,7 @@ def output_vulns(outfile, lyst):
         outfile.write(vuln + "\n")
     outfile.write("#" * 70 + "\n")
 
-def shoMe(option=None, infile, outfile):
+def shoMe(infile, outfile):
     ip_port_list = []
     webserver_list = []
     vulns_list = []
@@ -44,7 +44,6 @@ def shoMe(option=None, infile, outfile):
                     continue
                 for x in info["data"]:
                     if ("Server: Apache/" in x["data"]):
-                        #print(str(x["data"]))
                         tmp= str(x["data"]).split("Server: Apache/")[1].split("\n")[0].replace("/", "").replace("\r", "")[0:14]
                         apache_result = "IP: {}; Apache Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
                         webserver_list.append(apache_result)
@@ -60,6 +59,10 @@ def shoMe(option=None, infile, outfile):
                         tmp = str(x["data"]).split("X-Powered-By: PHP")[1].split("\n")[0].replace("/", "").replace("\r", "")[0:6]
                         php_result = "IP: {}; PHP Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
                         webserver_list.append(php_result)
+                    if ("X-AspNet-Version: " in x["data"]):
+                        tmp = str(x["data"]).split("X-AspNet-Version: ")[1].split("\n")[0].replace("/", "").replace("\r", "")
+                        asp_dot_net_result = "IP: {}; ASP.Net Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
+                        webserver_list.append(asp_dot_net_result)
                     if ("Server: Apache-Coyote/" in x["data"]):
                         tmp = str(x["data"]).split("Server: Apache-Coyote/")[1].split("\n")[0].replace("/", "").replace("\r", "")
                         tomcat_result = "IP: {}; Coyote Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
@@ -68,7 +71,10 @@ def shoMe(option=None, infile, outfile):
                         tmp = str(x["data"]).split("Server: lighttpd/")[1].split("\n")[0].replace("/", "").replace("\r", "")
                         lighttpd_result = "IP: {}; Lighttpd Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
                         webserver_list.append(lighttpd_result)
-                    # Node.js is a bit of an edge case in the way it formats header data. Will have added soon
+                    if ("SERVER: node.js/" in x["data"]):
+                        tmp = str(x["data"]).split("SERVER: node.js/")[1].split("\n")[0].replace("/", "").replace("\r", "")[0:6]
+                        node_js_result = "IP: {}; Node.js Version: {}; Port: {} ".format(x['ip_str'], tmp, x['port'])
+                        webserver_list.append(node_js_result)
                     if ("vulns" in x.keys()):
                         tmp = x['vulns']
                         for k,v in tmp.items():
@@ -100,12 +106,3 @@ def shoMe(option=None, infile, outfile):
 if __name__ == '__main__':
     shoMe(argv[1], argv[2])
     # ArgParse stuff coming soon
-    parser = argparse.ArgumentParser(add_help=True, description='A script for querying Shodan\'s API for interesting information useful for web application and external pentests', formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('IP_file', help='A file of IP addresses you want to search Shodan for')
-    parser.add_argument('--output', help='The name of the output file to write results to')
-    parser.add_argument('--history', help='Shodan records a complete history of information on a given IP address. This flag enables the history to be gathered as well as current data')
-    parser.add_argument('-a', '--all', help='')
-    parser.add_argument('--vulns', help=)
-    parser.add_argument('', help=)
-
-    args = parser.parse_args()
