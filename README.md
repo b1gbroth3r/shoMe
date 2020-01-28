@@ -3,7 +3,7 @@ Shoutout to @blurbdust for the idea and core code for this script!
 A Python script that queries a list of IPs and returns useful or interesting information (for externals/webapps).
 
 Example:
-```python3 shoMe.py <file_of_IPs> <output_file>```
+```python3 shoMe.py 1.1.1.1 2.2.2.2 3.3.3.3 output.txt```
 
 Example Output:
 ```
@@ -30,7 +30,6 @@ IP: 2.2.2.2; Port 22
 
 __Upcoming Additions__:
 - [x] Additional webservers to look for
-~~- [ ] Edge case for Node.js~~
+- [x] Support for CIDR notation
 - [ ] Possible threading support
 - [ ] Write output to structured file to organize data into tables
-- [x] Support for CIDR notation
