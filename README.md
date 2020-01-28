@@ -2,13 +2,14 @@
 Shoutout to @blurbdust for the idea and core code for this script!
 A Python script that queries a list of IPs and returns useful or interesting information (for externals/webapps).
 
-Example:
-```python3 shoMe.py 1.1.1.1 2.2.2.2 3.3.3.3 output.txt
-   python3 showMe.py --ip_file ips_in.txt ips_out.txt
-   python3 shoMe.py --cidr_file cidr_in.txt cidr_out.txt
+```
+Examples:
+python3 shoMe.py 1.1.1.1 2.2.2.2 3.3.3.3 output.txt
+python3 showMe.py --ip_file ips_in.txt ips_out.txt
+python3 shoMe.py --cidr_file cidr_in.txt cidr_out.txt
+```
 ```
 Example Output:
-```
 ######################################################################
 IP and Port information:
 IP: 1.1.1.1; Ports: 80, 8080
@@ -28,7 +29,7 @@ Verified vulnerabilities:
 ######################################################################
 These IP addresses have interesting ports open:
 IP: 2.2.2.2; Port 22
- ```
+```
 ```
 usage: shoMe.py [-h] [--ip_file IP_FILE] [--cidr_file CIDR_FILE]
                 [ips [ips ...]] outfile
