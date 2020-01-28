@@ -32,6 +32,7 @@ IP: 2.2.2.2; Port 22
 ```
 ```
 usage: shoMe.py [-h] [--ip_file IP_FILE] [--cidr_file CIDR_FILE]
+                [--history HIST]
                 [ips [ips ...]] outfile
 
 Script for parsing Shodan data
@@ -45,6 +46,9 @@ optional arguments:
   --ip_file IP_FILE     File of individual IP addresses delimited by newlines
   --cidr_file CIDR_FILE
                         File of CIDR IP ranges delimited by newlines
+  --history HIST        Option to toggle history on, off by default (Warning:
+                        Can significantly increase amount of data returned,
+                        not always useful)
 ```
 
 __Upcoming Additions__:
