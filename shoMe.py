@@ -1,11 +1,10 @@
 import shodan
-import textwrap
-import re
 import argparse
-from sys import *
-from ipaddress import IPv4Network
+import ipaddress
+from os import getcwd
+from termcolor import colored
 
-API_KEY = "ENTER API KEY HERE"
+API_KEY = "ZxIrBuTLSdeLdwNMrASJxiDiWDbBrNes"
 HIGH_PROFILE_PORTS = [20, 21, 22, 23, 88, 107, 115, 137, 139, 161, 389, 445, 623, 1443, 3306, 3389, 5432, 5432, 5900, 
                       27017]
 INTERESTING_TARGETS = []
@@ -104,6 +103,51 @@ def shoMe(infile, outfile):
                 out.write("IP: {}; Port: {}".format(hv[0], hv[1]) + "\n")
 
 if __name__ == '__main__':
-    shoMe(argv[1], argv[2])
-    # ArgParse stuff coming soon
+    parser = argparse.ArgumentParser(prog='shoMe.py', description="Script for parsing Shodan data")
+    parser.add_argument('ips', nargs="*", help="IP addresses to scan")
+    parser.add_argument('outfile', help="File to write results to")
+    parser.add_argument('--ip_file', help="File of individual IP addresses delimited by newlines")
+    parser.add_argument('--cidr_file', dest='cidr_file', help="File of CIDR IP ranges delimited by newlines")
 
+    args = parser.parse_args()
+    
+    if (args.ips != None and not args.ip_file and not args.cidr_file):
+        try:
+            print(colored("[!] Processing CIDR ranges.", "blue", attrs=['bold']))
+            with open("cidr_ips.txt", "w") as cidr:
+                IP = args.ips
+                for i in IP:
+                    for j in ipaddress.IPv4Network(i):
+                        cidr.write(str(j) + "\n")
+            print(colored("[+] CIDR ranges processed and are being queried...", "yellow", attrs=['bold']))
+            cwd = getcwd()
+            path = cwd + '/cidr_ips.txt'
+            shoMe(path, args.outfile)
+            print(colored("[+] All IPs have been queried! Check {} for the results".format(args.outfile), "green", attrs=['bold']))
+        except:
+            print(colored("[!] Error: Please check typos and make sure arguments are correct", "red", attrs=['bold']))
+
+    if (args.ip_file != None):
+        try:
+            print(colored("[+] Loading file containing IP addresses", "yellow", attrs=['bold']))
+            shoMe(args.ip_file, args.outfile)
+            print(colored("[+] All IP addresses have been queried! Check {} for the results".format(args.outfile), "cyan", attrs=['bold']))
+        except:
+            print(colored("[!] Error: Please check typos and contents of the ip file for errors", "red", attrs=['bold']))
+
+    elif (args.cidr_file):
+        try:
+            print(colored("[+] Loading file containing CIDR ranges", "blue", attrs=['bold']))
+            with open(args.cidr_file, "r") as cidr:
+                with open("cidr_to_ips.txt", "w") as cidr_to_ip:
+                    for rng in cidr:
+                        ip = rng.strip("\n")
+                        for i in ipaddress.IPv4Network(ip):
+                            cidr_to_ip.write(str(i) + "\n")
+            print(colored("[+] All IPs within the ranges are processed. Querying Shodan now...", "yellow", attrs=['bold']))
+            cwd = getcwd()
+            path = cwd + '/cidr_to_ips.txt'
+            shoMe(path, args.outfile)
+            print(colored("[+] All IPs within the CIDR ranges have been queried! Check {} for the results".format(args.outfile), "green", attrs=['bold']))
+        except:
+            print(colored("[!] Error: Please check typos and contents of the CIDR file for errors", "red", attrs=['bold']))
