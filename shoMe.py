@@ -28,7 +28,7 @@ def output_vulns(outfile, lyst):
         outfile.write(vuln + "\n")
     outfile.write("#" * 70 + "\n")
 
-def shoMe(infile, outfile):
+def shoMe(infile, outfile, hist):
     ip_port_list = []
     webserver_list = []
     vulns_list = []
@@ -38,7 +38,7 @@ def shoMe(infile, outfile):
             for ip in ips:
                 ret = "IP: "
                 try:
-                    info = api.host(ip, history=False)
+                    info = api.host(ip, history=hist)
                 except:
                     continue
                 for x in info["data"]:
@@ -107,8 +107,9 @@ if __name__ == '__main__':
     parser.add_argument('ips', nargs="*", help="IP addresses to scan")
     parser.add_argument('outfile', help="File to write results to")
     parser.add_argument('--ip_file', help="File of individual IP addresses delimited by newlines")
-    parser.add_argument('--cidr_file', dest='cidr_file', help="File of CIDR IP ranges delimited by newlines")
-
+    parser.add_argument('--cidr_file', help="File of CIDR IP ranges delimited by newlines")
+    parser.add_argument('--history', dest='hist', default=False, help="Option to toggle history on, off by default (Warning: Can significantly increase amount of data returned, not always useful)")
+    
     args = parser.parse_args()
     
     if (args.ips != None and not args.ip_file and not args.cidr_file):
@@ -122,7 +123,7 @@ if __name__ == '__main__':
             print(colored("[+] CIDR ranges processed and are being queried...", "yellow", attrs=['bold']))
             cwd = getcwd()
             path = cwd + '/cidr_ips.txt'
-            shoMe(path, args.outfile)
+            shoMe(path, args.outfile, args.hist)
             print(colored("[+] All IPs have been queried! Check {} for the results".format(args.outfile), "green", attrs=['bold']))
         except:
             print(colored("[!] Error: Please check typos and make sure arguments are correct", "red", attrs=['bold']))
@@ -130,7 +131,7 @@ if __name__ == '__main__':
     if (args.ip_file != None):
         try:
             print(colored("[+] Loading file containing IP addresses", "yellow", attrs=['bold']))
-            shoMe(args.ip_file, args.outfile)
+            shoMe(args.ip_file, args.outfile, args.hist)
             print(colored("[+] All IP addresses have been queried! Check {} for the results".format(args.outfile), "cyan", attrs=['bold']))
         except:
             print(colored("[!] Error: Please check typos and contents of the ip file for errors", "red", attrs=['bold']))
@@ -147,7 +148,7 @@ if __name__ == '__main__':
             print(colored("[+] All IPs within the ranges are processed. Querying Shodan now...", "yellow", attrs=['bold']))
             cwd = getcwd()
             path = cwd + '/cidr_to_ips.txt'
-            shoMe(path, args.outfile)
+            shoMe(path, args.outfile, args.hist)
             print(colored("[+] All IPs within the CIDR ranges have been queried! Check {} for the results".format(args.outfile), "green", attrs=['bold']))
         except:
             print(colored("[!] Error: Please check typos and contents of the CIDR file for errors", "red", attrs=['bold']))
