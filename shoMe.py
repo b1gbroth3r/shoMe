@@ -114,13 +114,13 @@ if __name__ == '__main__':
     
     if (args.ips != None and not args.ip_file and not args.cidr_file):
         try:
-            print(colored("[!] Processing CIDR ranges.", "blue", attrs=['bold']))
+            print(colored("[-] Processing CIDR ranges.", "blue", attrs=['bold']))
             with open("cidr_ips.txt", "w") as cidr:
                 IP = args.ips
                 for i in IP:
                     for j in ipaddress.IPv4Network(i):
                         cidr.write(str(j) + "\n")
-            print(colored("[+] CIDR ranges processed and are being queried...", "yellow", attrs=['bold']))
+            print(colored("[*] CIDR ranges processed and are being queried...", "yellow", attrs=['bold']))
             cwd = getcwd()
             path = cwd + '/cidr_ips.txt'
             shoMe(path, args.outfile, args.hist)
@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
     if (args.ip_file != None):
         try:
-            print(colored("[+] Loading file containing IP addresses", "yellow", attrs=['bold']))
+            print(colored("[-] Loading file containing IP addresses", "yellow", attrs=['bold']))
             shoMe(args.ip_file, args.outfile, args.hist)
             print(colored("[+] All IP addresses have been queried! Check {} for the results".format(args.outfile), "cyan", attrs=['bold']))
         except:
@@ -138,14 +138,14 @@ if __name__ == '__main__':
 
     elif (args.cidr_file):
         try:
-            print(colored("[+] Loading file containing CIDR ranges", "blue", attrs=['bold']))
+            print(colored("[-] Loading file containing CIDR ranges", "blue", attrs=['bold']))
             with open(args.cidr_file, "r") as cidr:
                 with open("cidr_to_ips.txt", "w") as cidr_to_ip:
                     for rng in cidr:
                         ip = rng.strip("\n")
                         for i in ipaddress.IPv4Network(ip):
                             cidr_to_ip.write(str(i) + "\n")
-            print(colored("[+] All IPs within the ranges are processed. Querying Shodan now...", "yellow", attrs=['bold']))
+            print(colored("[*] All IPs within the ranges are processed. Querying Shodan now...", "yellow", attrs=['bold']))
             cwd = getcwd()
             path = cwd + '/cidr_to_ips.txt'
             shoMe(path, args.outfile, args.hist)
