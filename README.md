@@ -1,7 +1,7 @@
 # shoMe
 Shoutout to @blurbdust for the idea and core code for this script!
 A Python script that queries a list of IPs and returns useful or interesting information (for externals/webapps).
-Don't forget to add your API key at the top of the script, otherwise you'll get empty results.
+__Don't forget to add your API key at the top of the script, otherwise you'll get empty results.__
 
 ```
 Examples:
