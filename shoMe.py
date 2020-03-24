@@ -1,13 +1,23 @@
 import shodan
 import argparse
 import ipaddress
+import platform
 from os import getcwd
 from termcolor import colored
 
 API_KEY = "ENTER API KEY HERE"
-HIGH_PROFILE_PORTS = [20, 21, 22, 23, 88, 107, 115, 137, 139, 161, 389, 445, 623, 1443, 3306, 3389, 5432, 5432, 5900, 
+HIGH_PROFILE_PORTS = [20, 21, 22, 23, 88, 107, 115, 137, 139, 161, 389, 445, 623, 1443, 3306, 3389, 5432, 5900, 
                       27017]
 INTERESTING_TARGETS = []
+
+def get_os_and_path(cidr_file):
+    cwd = getcwd()
+    opsystem = platform.system()
+    if opsystem == 'Darwin' or opsystem == 'Linux':
+        path = cwd + '/' + cidr_file
+    else:
+        path = cwd + '\\' + cidr_file
+    return path
 
 def output_ip_port(outfile, lyst):
     outfile.write("#" * 70 + "\n")
@@ -121,8 +131,7 @@ if __name__ == '__main__':
                     for j in ipaddress.IPv4Network(i):
                         cidr.write(str(j) + "\n")
             print(colored("[*] CIDR ranges processed and are being queried...", "yellow", attrs=['bold']))
-            cwd = getcwd()
-            path = cwd + '/cidr_ips.txt'
+            path = get_os_and_path(cidr)
             shoMe(path, args.outfile, args.hist)
             print(colored("[+] All IPs have been queried! Check {} for the results".format(args.outfile), "green", attrs=['bold']))
         except:
@@ -138,16 +147,17 @@ if __name__ == '__main__':
 
     elif (args.cidr_file):
         try:
-            print(colored("[-] Loading file containing CIDR ranges", "blue", attrs=['bold']))
+            print(colored("[-] Creating list of IPs from CIDR ranges", "blue", attrs=['bold']))
             with open(args.cidr_file, "r") as cidr:
                 with open("cidr_to_ips.txt", "w") as cidr_to_ip:
                     for rng in cidr:
                         ip = rng.strip("\n")
-                        for i in ipaddress.IPv4Network(ip):
-                            cidr_to_ip.write(str(i) + "\n")
+                        if (ip == ""):
+                            continue
+                        for i in ipaddress.IPv4Network(ip, False):
+                            cidr_to_ip.write(str(i) + '\n')
             print(colored("[*] All IPs within the ranges are processed. Querying Shodan now...", "yellow", attrs=['bold']))
-            cwd = getcwd()
-            path = cwd + '/cidr_to_ips.txt'
+            path = get_os_and_path("cidr_to_ips.txt")
             shoMe(path, args.outfile, args.hist)
             print(colored("[+] All IPs within the CIDR ranges have been queried! Check {} for the results".format(args.outfile), "green", attrs=['bold']))
         except:

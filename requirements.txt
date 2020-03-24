@@ -1,0 +1,2 @@
+shodan==1.22.0
+termcolor==1.1.0
