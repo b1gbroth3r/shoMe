@@ -6,7 +6,7 @@ import headers
 from os import getcwd
 from termcolor import colored
 
-API_KEY = "RZi6tB6WtGjo3japnXzUACEzzBIs5uuB"
+API_KEY = "ENTER API KEY"
 
 def shoMe(ip_addresses, headers, history, vulns):
     verified_vulns = []
