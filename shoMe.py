@@ -9,6 +9,9 @@ from termcolor import colored
 API_KEY = "RZi6tB6WtGjo3japnXzUACEzzBIs5uuB"
 
 def shoMe(ip_addresses, headers, history, vulns):
+    verified_vulns = []
+    captured_headers = []
+    ips_and_ports = []
     api = shodan.Shodan(API_KEY)
     for ip in ip_addresses:
         ret = "IP: "
@@ -22,16 +25,22 @@ def shoMe(ip_addresses, headers, history, vulns):
                 for k,v in tmp.items():
                     if (v["verified"] == True):
                         vulns = x["ip_str"] + " " + k + " " + str(v["verified"])
-                        print(vulns)
-            #if (headers != None and headers in x["data"]):
+                        verified_vulns.append(vulns)
+            if (headers != None):
+                for header in headers:
+                    if (header in x["data"]):
+                        tmp= str(x["data"]).split(header)[1].split("\n")[0].replace("/", "").replace("\r", "")
+                        _result = "IP: {}; {} {}; Port: {} ".format(x['ip_str'], header, tmp, x['port'])
+                        captured_headers.append(_result)
         if (info != None):
             ret += info["ip_str"]
             ret += "; Ports: "
             p_ = info["ports"]
             for port in p_:
                 ret += str(port) + ", "
-            print(ret)
+            ips_and_ports.append(ret)
             info = None
+    return ips_and_ports, captured_headers, verified_vulns
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="shoMe.py", description="Script to parse Shodan data")
@@ -44,10 +53,10 @@ if __name__ == "__main__":
     parser.add_argument("--outfile", dest="outfile", help="File to write results to")
 
     args = parser.parse_args()
-    print(args)
-
+    
     if (args.IPs != None):
-        shoMe(args.IPs, args.headers, args.hist, args.vulns)
+        the_money = shoMe(args.IPs, args.headers, args.hist, args.vulns)
+        print(the_money[2])
     elif (args.ipfile != None):
         print("Hello")
     else:
