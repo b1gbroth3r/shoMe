@@ -8,7 +8,7 @@ from termcolor import colored
 
 import assist
 
-API_KEY = "7mUSV6KDvZnCrbE13T7i95JYeKglqFsM"
+API_KEY = "ENTER API KEY"
 
 def reporting_verified_vulns(x, lyst):
     tmp = x["vulns"]
