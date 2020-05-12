@@ -1,12 +1,26 @@
-import shodan
 import argparse
 import ipaddress
 import platform
-import headers
 from os import getcwd
+
+import shodan
 from termcolor import colored
 
-API_KEY = "ENTER API KEY"
+import assist
+
+API_KEY = "7mUSV6KDvZnCrbE13T7i95JYeKglqFsM"
+
+def reporting_verified_vulns(x, lyst):
+    tmp = x["vulns"]
+    for k,v in tmp.items():
+        if (v["verified"] == False):
+            vulns = x["ip_str"] + " " + k + " " + str(v["verified"])
+            lyst.append(vulns)
+
+def retrieve_headers(header, x, lyst):
+    tmp = str(x["data"]).split(header)[1].split("\n")[0].replace("/", "").replace("\r", "")
+    _result = "IP: {}; {} {}; Port: {} ".format(x['ip_str'], header, tmp, x['port'])
+    lyst.append(_result)
 
 def shoMe(ip_addresses, headers, history, vulns):
     verified_vulns = []
@@ -21,17 +35,11 @@ def shoMe(ip_addresses, headers, history, vulns):
             continue
         for x in info["data"]:
             if (vulns and "vulns" in x.keys()):
-                tmp = x["vulns"]
-                for k,v in tmp.items():
-                    if (v["verified"] == True):
-                        vulns = x["ip_str"] + " " + k + " " + str(v["verified"])
-                        verified_vulns.append(vulns)
+                reporting_verified_vulns(x, verified_vulns)
             if (headers != None):
                 for header in headers:
                     if (header in x["data"]):
-                        tmp= str(x["data"]).split(header)[1].split("\n")[0].replace("/", "").replace("\r", "")
-                        _result = "IP: {}; {} {}; Port: {} ".format(x['ip_str'], header, tmp, x['port'])
-                        captured_headers.append(_result)
+                        retrieve_headers(header, x, captured_headers)
         if (info != None):
             ret += info["ip_str"]
             ret += "; Ports: "
@@ -56,8 +64,16 @@ if __name__ == "__main__":
     
     if (args.IPs != None):
         the_money = shoMe(args.IPs, args.headers, args.hist, args.vulns)
-        print(the_money[2])
+        if (args.outfile != None):
+            assist.write_results(the_money, args.outfile)
     elif (args.ipfile != None):
-        print("Hello")
+        addrs = []
+        with open(args.ipfile, "r") as ipfile:
+            for ip in ipfile:
+                addrs.append(ip.strip())
+        the_money = shoMe(addrs, args.headers, args.hist, args.vulns)
+        if (args.outfile != None):
+            assist.write_results(the_money, args.outfile)
+        
     else:
         parser.print_help()
