@@ -7,7 +7,7 @@ from os import getcwd
 import shodan
 from termcolor import colored
 
-API_KEY = "XPSo6uKRSZfgsotuvEYTfXdIzRQJ08y6"
+API_KEY = "ENTER API KEY HERE"
 # TODO: Replace all prints with log
 
 
