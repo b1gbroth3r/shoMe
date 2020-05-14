@@ -1,15 +1,18 @@
 # shoMe
+
 Shoutout to @blurbdust for the idea and core code for this script!
-A Python script that queries a list of IPs and returns useful or interesting information (for externals/webapps).
+A Python script that queries a list of IPs and returns useful or interesting information (for externals/web-apps).
 __Don't forget to add your API key at the top of the script, otherwise you'll get empty results.__
 
-```
+```python3
 Examples:
-python3 shoMe.py 1.1.1.1 2.2.2.2 3.3.3.3 output.txt
-python3 showMe.py --ip_file ips_in.txt ips_out.txt
-python3 shoMe.py --cidr_file cidr_in.txt cidr_out.txt
+python3 shoMe.py --IPs 1.1.1.1 2.2.2.2 3.3.3.3
+python3 shoMe.py --ip-file IPs.txt --outfile output.txt
+python3 shoMe.py --ip-file IPs.txt --header "Server: nginx/"
+python3 shoMe.py --IPs 1.1.1.1 2.2.2.2 --outfile output.txt --vulns True
 ```
-```
+
+```txt
 Example Output:
 ######################################################################
 IP and Port information:
@@ -31,29 +34,30 @@ Verified vulnerabilities:
 These IP addresses have interesting ports open:
 IP: 2.2.2.2; Port 22
 ```
-```
-usage: shoMe.py [-h] [--ip_file IP_FILE] [--cidr_file CIDR_FILE]
-                [--history HIST]
-                [ips [ips ...]] outfile
 
-Script for parsing Shodan data
+```python3
+usage: shoMe.py [-h] [--IPs [IPS [IPS ...]]] [--ip-file IPFILE]
+                [--header [HEADERS [HEADERS ...]]] [--vulns VULNS]
+                [--history HIST] [--outfile OUTFILE]
 
-positional arguments:
-  ips                   IP addresses to scan
-  outfile               File to write results to
+Script to parse Shodan data
 
 optional arguments:
   -h, --help            show this help message and exit
-  --ip_file IP_FILE     File of individual IP addresses delimited by newlines
-  --cidr_file CIDR_FILE
-                        File of CIDR IP ranges delimited by newlines
-  --history HIST        Option to toggle history on, off by default (Warning:
-                        Can significantly increase amount of data returned,
-                        not always useful)
+  --IPs [IPS [IPS ...]]
+                        IP Addresses to scan.
+  --ip-file IPFILE      File containing IPs delimited by a newline
+  --header [HEADERS [HEADERS ...]]
+                        Server headers to look for.
+  --vulns VULNS         Includes verified vulns associated with IPs
+  --history HIST        Option to include historical data for the IP being
+                        queried. Can significantly increase time to execute
+                        script.
+  --outfile OUTFILE     File to write results to
 ```
 
 __Upcoming Additions__:
-- [x] Additional webservers to look for
-- [x] Support for CIDR notation
-- [ ] Possible threading support
+
+- [x] Additional web servers to look for
+- [ ] Support for CIDR notation
 - [ ] Write output to structured file to organize data into tables
