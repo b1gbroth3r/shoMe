@@ -15,10 +15,6 @@ def print_results(results):
     ip_and_port_results = results[0]
     header_results = results[1]
     verified_vulns_results = results[2]
-    
-    ip_and_port_results.sort()
-    header_results.sort()
-    verified_vulns_results.sort()
 
     print("#" * 20 + "IP/Port Results " + "#" * 20)
     for ipport in ip_and_port_results:
@@ -48,10 +44,6 @@ def write_results(results, outfile):
         ip_and_port_results = results[0]
         header_results = results[1]
         verified_vulns_results = results[2]
-
-        ip_and_port_results.sort()
-        header_results.sort()
-        verified_vulns_results.sort()
 
         results_file.write("#" * 20 + "IP/Port Results:" + "#" * 20 + "\n")
         for ipport in ip_and_port_results:
