@@ -58,6 +58,4 @@ optional arguments:
 
 __Upcoming Additions__:
 
-- [x] Additional web servers to look for
-- [ ] Support for CIDR notation
 - [ ] Write output to structured file to organize data into tables
