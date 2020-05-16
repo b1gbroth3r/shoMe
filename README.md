@@ -4,6 +4,9 @@ Shoutout to @blurbdust for the idea and core code for this script!
 A Python script that queries a list of IPs and returns useful or interesting information (for externals/web-apps).
 __Don't forget to add your API key at the top of the script, otherwise you'll get empty results.__
 
+If you have a file containing CIDR ranges separated by a newline, you can use the 
+convert_cidr_ranges.py script to expand each range and write the IPs to a file to be passed into shoMe.py with the --ip-file argument.
+
 ```python3
 Examples:
 python3 shoMe.py --IPs 1.1.1.1 2.2.2.2 3.3.3.3
