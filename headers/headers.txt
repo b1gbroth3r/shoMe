@@ -1,9 +1,9 @@
-"Server: Apache/"
-"Server: nginx/"
-"Server: Microsoft-IIS"
-"X-Powered-By: PHP"
-"X-AspNet-Version: "
-"Server: Apache-Coyote/"
-"Server: lighttpd/"
-"SERVER: node.js/"
-"X-OWA-Version: "
+Server: Apache/
+Server: nginx/
+Server: Microsoft-IIS
+X-Powered-By: PHP
+X-AspNet-Version: 
+Server: Apache-Coyote/
+Server: lighttpd/
+SERVER: node.js/
+X-OWA-Version: 
