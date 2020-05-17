@@ -54,15 +54,15 @@ Script to parse Shodan data
 optional arguments:
   -h, --help            show this help message and exit
   --IPs [IPS [IPS ...]]
-                        IP Addresses to scan. (default: None)
-  --ip-file IPFILE      File containing IPs delimited by a newline (default: None)
+                        IP Addresses to scan.
+  --ip-file IPFILE      File containing IPs delimited by a newline
   --header [HEADERS [HEADERS ...]]
-                        Server headers to look for. (default: None)
-  --all-headers ALLHEADS
-                        Load and search for all headers (default: None)
-  --vulns VULNS         Includes verified vulns associated with IPs (default: False)
-  --history HIST        Option to include historical data (default: False)
-  --outfile OUTFILE     File to write results to (default: None)
+                        Server headers to look for.
+  --all-headers         Load and search for all headers
+  --vulns               Includes verified vulns associated with IPs
+  --history             Option to include historical data
+  --outfile OUTFILE     File to write results to
+  --verbose             Toggle on verbose output, not implemented yet
 ```
 
 __Upcoming Additions__:
