@@ -7,6 +7,7 @@ from os import getcwd
 import shodan
 from termcolor import colored
 
+
 API_KEY = "ENTER API KEY HERE"
 # TODO: Replace all prints with log
 
@@ -25,22 +26,22 @@ def print_results(results):
     header_results = results[1]
     verified_vulns_results = results[2]
 
-    print("#" * 20 + "IP/Port Results " + "#" * 20)
+    print("#" * 20 + " IP/Port Results " + "#" * 20)
     for ipport in ip_and_port_results:
         print(ipport)
-    print("#" * 20 + "Server Headers Found " + "#" * 20)
+    print("#" * 20 + " Server Headers Found " + "#" * 20)
     if (len(header_results) == 0):
-        if (args.headers != None):
+        if (args.headers or args.allheads):
             print("No specified headers were found")
         else:
             print("You didn't specify the --header arg")
     for header in header_results:
         print(header)
 
-    print("#" * 20 + "Verified Vulnerabilities " + "#" * 20)
+    print("#" * 20 + " Verified Vulnerabilities " + "#" * 20)
     if (len(verified_vulns_results) == 0):
-        if (args.vulns != False):
-            print("No vulns were found on the IPs")
+        if (args.vulns):
+            print("No verified vulns were found on the IPs")
         else:
             print("You didn't specify the --vulns arg")
     for vv in verified_vulns_results:
@@ -54,23 +55,23 @@ def write_results(results, outfile):
         header_results = results[1]
         verified_vulns_results = results[2]
 
-        results_file.write("#" * 20 + "IP/Port Results:" + "#" * 20 + "\n")
+        results_file.write("#" * 20 + " IP/Port Results: " + "#" * 20 + "\n")
         for ipport in ip_and_port_results:
             results_file.write(str(ipport) + "\n")
         results_file.write(
-            "#" * 20 + "Server Headers Found: " + "#" * 20 + "\n")
+            "#" * 20 + " Server Headers Found: " + "#" * 20 + "\n")
         if (len(header_results) == 0):
-            if (args.headers != None):
+            if (args.headers or args.allheads):
                 results_file.write("No headers were specified or found\n")
             else:
                 results_file.write("You didn't specify the --header arg\n")
         for headerr in header_results:
             results_file.write(str(headerr) + "\n")
         results_file.write(
-            "#" * 20 + "Verified Vulnerabilities: " + "#" * 20 + "\n")
+            "#" * 20 + " Verified Vulnerabilities: " + "#" * 20 + "\n")
         if (len(verified_vulns_results) == 0):
-            if (args.vulns != False):
-                results_file.write("No vulns were found on the IPs\n")
+            if (args.vulns):
+                results_file.write("No verified vulns were found on the IPs\n")
             else:
                 results_file.write("You didn't specify the --vulns arg\n")
         for vv in verified_vulns_results:
@@ -127,7 +128,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
         prog="shoMe.py", description="Script to parse Shodan data",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+        formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument("--IPs", nargs="*", dest="IPs",
                         help="IP Addresses to scan.")
     parser.add_argument("--ip-file", dest="ipfile",
@@ -135,17 +136,22 @@ if __name__ == "__main__":
     parser.add_argument("--header", nargs="*", dest="headers",
                         help="Server headers to look for.")
     parser.add_argument("--all-headers", dest="allheads",
+                        action="store_true",
                         help="Load and search for all headers")
-    parser.add_argument("--vulns", dest="vulns", default=False, type=bool,
+    parser.add_argument("--vulns", dest="vulns", default=False, 
+                        action="store_true",
                         help="Includes verified vulns associated with IPs")
-    parser.add_argument("--history", dest="hist", default=False, type=bool,
+    parser.add_argument("--history", dest="hist", default=False,
+                        action="store_true",
                         help="Option to include historical data")
     parser.add_argument("--outfile", dest="outfile",
                         help="File to write results to")
+    parser.add_argument("--verbose", dest="verb", action="store_true",
+                        help="Toggle on verbose output, not implemented yet")
 
     args = parser.parse_args()
 
-    if (args.allheads != None):
+    if (args.allheads):
         all_headers = load_all_headers()
         if (args.IPs != None):
             the_money = shoMe(args.IPs, all_headers, args.hist, args.vulns)
@@ -160,13 +166,15 @@ if __name__ == "__main__":
                     addrs.append(ip.strip("\n"))
             the_money = shoMe(addrs, all_headers, args.hist, args.vulns)
             if (args.outfile != None):
+                print("Writing results to " + args.outfile)
                 write_results(the_money, args.outfile)
+                print("Results written to " + args.outfile)
             else:
                 print_results(the_money)
         else:
             parser.print_help()
 
-    elif (args.allheads == None):
+    else:
         if (args.IPs != None):
             the_money = shoMe(args.IPs, args.headers, args.hist, args.vulns)
             if (args.outfile != None):
@@ -180,7 +188,9 @@ if __name__ == "__main__":
                     addrs.append(ip.strip())
             the_money = shoMe(addrs, args.headers, args.hist, args.vulns)
             if (args.outfile != None):
+                print("Writing results to " + args.outfile)
                 write_results(the_money, args.outfile)
+                print("Results written to " + args.outfile)
             else:
                 print_results(the_money)
         else:
