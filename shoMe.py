@@ -126,7 +126,8 @@ def shoMe(ip_addresses, headers, history, vulns):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(
-        prog="shoMe.py", description="Script to parse Shodan data")
+        prog="shoMe.py", description="Script to parse Shodan data",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--IPs", nargs="*", dest="IPs",
                         help="IP Addresses to scan.")
     parser.add_argument("--ip-file", dest="ipfile",
@@ -135,9 +136,9 @@ if __name__ == "__main__":
                         help="Server headers to look for.")
     parser.add_argument("--all-headers", dest="allheads",
                         help="Load and search for all headers")
-    parser.add_argument("--vulns", dest="vulns", default=False,
+    parser.add_argument("--vulns", dest="vulns", default=False, type=bool,
                         help="Includes verified vulns associated with IPs")
-    parser.add_argument("--history", dest="hist", default=False,
+    parser.add_argument("--history", dest="hist", default=False, type=bool,
                         help="Option to include historical data")
     parser.add_argument("--outfile", dest="outfile",
                         help="File to write results to")
@@ -162,6 +163,8 @@ if __name__ == "__main__":
                 write_results(the_money, args.outfile)
             else:
                 print_results(the_money)
+        else:
+            parser.print_help()
 
     elif (args.allheads == None):
         if (args.IPs != None):
@@ -180,6 +183,5 @@ if __name__ == "__main__":
                 write_results(the_money, args.outfile)
             else:
                 print_results(the_money)
-
-    else:
-        parser.print_help()
+        else:
+            parser.print_help()
