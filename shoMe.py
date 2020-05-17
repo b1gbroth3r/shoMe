@@ -1,7 +1,7 @@
 import argparse
 import ipaddress
-import platform
 import logging
+import platform
 from os import getcwd
 
 import shodan
@@ -9,6 +9,15 @@ from termcolor import colored
 
 API_KEY = "ENTER API KEY HERE"
 # TODO: Replace all prints with log
+
+
+def load_all_headers():
+    header_list = []
+    with open("headers/headers.txt") as header_file:
+        for header in header_file:
+            head = header.strip("\n")
+            header_list.append(head)
+    return header_list
 
 
 def print_results(results):
@@ -115,7 +124,7 @@ def shoMe(ip_addresses, headers, history, vulns):
 
 
 if __name__ == "__main__":
-    
+
     parser = argparse.ArgumentParser(
         prog="shoMe.py", description="Script to parse Shodan data")
     parser.add_argument("--IPs", nargs="*", dest="IPs",
@@ -124,30 +133,53 @@ if __name__ == "__main__":
                         help="File containing IPs delimited by a newline")
     parser.add_argument("--header", nargs="*", dest="headers",
                         help="Server headers to look for.")
+    parser.add_argument("--all-headers", dest="allheads",
+                        help="Load and search for all headers")
     parser.add_argument("--vulns", dest="vulns", default=False,
                         help="Includes verified vulns associated with IPs")
     parser.add_argument("--history", dest="hist", default=False,
-                        help="Option to include historical data for the IP being queried. Can significantly increase time to execute script.")
+                        help="Option to include historical data")
     parser.add_argument("--outfile", dest="outfile",
                         help="File to write results to")
 
     args = parser.parse_args()
 
-    if (args.IPs != None):
-        the_money = shoMe(args.IPs, args.headers, args.hist, args.vulns)
-        if (args.outfile != None):
-            write_results(the_money, args.outfile)
-        else:
-            print_results(the_money)
-    elif (args.ipfile != None):
-        addrs = []
-        with open(args.ipfile, "r") as ipfile:
-            for ip in ipfile:
-                addrs.append(ip.strip())
-        the_money = shoMe(addrs, args.headers, args.hist, args.vulns)
-        if (args.outfile != None):
-            write_results(the_money, args.outfile)
-        else:
-            print_results(the_money)
+    if (args.allheads != None):
+        all_headers = load_all_headers()
+        if (args.IPs != None):
+            the_money = shoMe(args.IPs, all_headers, args.hist, args.vulns)
+            if (args.outfile != None):
+                write_results(the_money, args.outfile)
+            else:
+                print_results(the_money)
+        elif (args.ipfile != None):
+            addrs = []
+            with open(args.ipfile, "r") as ipfile:
+                for ip in ipfile:
+                    addrs.append(ip.strip("\n"))
+            the_money = shoMe(addrs, all_headers, args.hist, args.vulns)
+            if (args.outfile != None):
+                write_results(the_money, args.outfile)
+            else:
+                print_results(the_money)
+
+    elif (args.allheads == None):
+        if (args.IPs != None):
+            the_money = shoMe(args.IPs, args.headers, args.hist, args.vulns)
+            if (args.outfile != None):
+                write_results(the_money, args.outfile)
+            else:
+                print_results(the_money)
+        elif (args.ipfile != None):
+            addrs = []
+            with open(args.ipfile, "r") as ipfile:
+                for ip in ipfile:
+                    addrs.append(ip.strip())
+            the_money = shoMe(addrs, args.headers, args.hist, args.vulns)
+            if (args.outfile != None):
+                write_results(the_money, args.outfile)
+            else:
+                print_results(the_money)
+
     else:
         parser.print_help()
