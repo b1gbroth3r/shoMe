@@ -1,18 +1,27 @@
 # shoMe
 
+__Data gathered from this script does NOT actively scan any IP/range, it only queries the current state of the database for data gathered by the Shodan crawlers. This script should be used for passive OSINT data gathering during a pentest/red team engagement. Do not act on any information gathered from shoMe unless you have explicit consent from the owner(s) of the addresses.__
+
 Shoutout to @blurbdust for the idea and core code for this script!
 A Python script that queries a list of IPs and returns useful or interesting information (for externals/web-apps).
 __Don't forget to add your API key at the top of the script, otherwise you'll get empty results.__
 
+First, run pip3 install -r requirements.txt to ensure you have the necessary libraries.
+
+The headers directory contains headers.txt, which lists common server headers to search for. Add/modify this list to suit your needs, and please feel free to ping me for suggestions on other server headers you think would be useful to search for.
+
+The tests directory contains test_ips.txt. This file contains a list of random IP addresses that should report at least one occurrence of every header and at least one verified vulnerability.
+
 If you have a file containing CIDR ranges separated by a newline, you can use the 
 convert_cidr_ranges.py script to expand each range and write the IPs to a file to be passed into shoMe.py with the --ip-file argument.
 
-```python3
+```txt
 Examples:
 python3 shoMe.py --IPs 1.1.1.1 2.2.2.2 3.3.3.3
 python3 shoMe.py --ip-file IPs.txt --outfile output.txt
 python3 shoMe.py --ip-file IPs.txt --header "Server: nginx/"
-python3 shoMe.py --IPs 1.1.1.1 2.2.2.2 --outfile output.txt --vulns True
+python3 shoMe.py --IPs 1.1.1.1 2.2.2.2 --outfile output.txt --vulns
+python3 shoMe.py --ip-file IPs.txt --all-headers --vulns
 ```
 
 ```txt
@@ -35,8 +44,10 @@ Verified Vulnerabilities:
 2.2.2.2 MS15-034 True
 ```
 
-```python3
-usage: shoMe.py [-h] [--IPs [IPS [IPS ...]]] [--ip-file IPFILE] [--header [HEADERS [HEADERS ...]]] [--all-headers ALLHEADS] [--vulns VULNS] [--history HIST] [--outfile OUTFILE]
+```txt
+usage: shoMe.py [-h] [--IPs [IPS [IPS ...]]] [--ip-file IPFILE] [
+                --header [HEADERS [HEADERS ...]]] [--all-headers ALLHEADS] 
+                [--vulns VULNS] [--history HIST] [--outfile OUTFILE]
 
 Script to parse Shodan data
 
