@@ -36,24 +36,22 @@ Verified Vulnerabilities:
 ```
 
 ```python3
-usage: shoMe.py [-h] [--IPs [IPS [IPS ...]]] [--ip-file IPFILE]
-                [--header [HEADERS [HEADERS ...]]] [--vulns VULNS]
-                [--history HIST] [--outfile OUTFILE]
+usage: shoMe.py [-h] [--IPs [IPS [IPS ...]]] [--ip-file IPFILE] [--header [HEADERS [HEADERS ...]]] [--all-headers ALLHEADS] [--vulns VULNS] [--history HIST] [--outfile OUTFILE]
 
 Script to parse Shodan data
 
 optional arguments:
   -h, --help            show this help message and exit
   --IPs [IPS [IPS ...]]
-                        IP Addresses to scan.
-  --ip-file IPFILE      File containing IPs delimited by a newline
+                        IP Addresses to scan. (default: None)
+  --ip-file IPFILE      File containing IPs delimited by a newline (default: None)
   --header [HEADERS [HEADERS ...]]
-                        Server headers to look for.
-  --vulns VULNS         Includes verified vulns associated with IPs
-  --history HIST        Option to include historical data for the IP being
-                        queried. Can significantly increase time to execute
-                        script.
-  --outfile OUTFILE     File to write results to
+                        Server headers to look for. (default: None)
+  --all-headers ALLHEADS
+                        Load and search for all headers (default: None)
+  --vulns VULNS         Includes verified vulns associated with IPs (default: False)
+  --history HIST        Option to include historical data (default: False)
+  --outfile OUTFILE     File to write results to (default: None)
 ```
 
 __Upcoming Additions__:
