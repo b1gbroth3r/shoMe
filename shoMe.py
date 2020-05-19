@@ -8,7 +8,7 @@ import shodan
 from termcolor import colored
 
 
-API_KEY = "ENTER API KEY HERE"
+API_KEY = "5AgRK7vAvikHcvTdhX7i2KsyTqpmQP5A"
 # TODO: Replace all prints with log
 
 
@@ -26,24 +26,31 @@ def print_results(results):
     header_results = results[1]
     verified_vulns_results = results[2]
 
-    print("#" * 20 + " IP/Port Results " + "#" * 20)
+    print(colored("#" * 20 + " IP/Port Results " + "#" * 20,
+                  "blue", attrs=["bold"]))
     for ipport in ip_and_port_results:
         print(ipport)
-    print("#" * 20 + " Server Headers Found " + "#" * 20)
+    print(colored("#" * 20 + " Server Headers Found " + "#" * 20,
+                  "blue", attrs=["bold"]))
     if (len(header_results) == 0):
         if (args.headers or args.allheads):
-            print("No specified headers were found")
+            print(colored("No specified headers were found",
+                          "red", attrs=["bold"]))
         else:
-            print("You didn't specify the --header arg")
+            print(colored("You didn't specify the --header arg",
+                          "red", attrs=["bold"]))
     for header in header_results:
         print(header)
 
-    print("#" * 20 + " Verified Vulnerabilities " + "#" * 20)
+    print(colored("#" * 20 + " Verified Vulnerabilities " + "#" * 20, 
+                  "blue", attrs=["bold"]))
     if (len(verified_vulns_results) == 0):
         if (args.vulns):
-            print("No verified vulns were found on the IPs")
+            print(colored("No verified vulns were found on the IPs",
+                          "red", attrs=["bold"]))
         else:
-            print("You didn't specify the --vulns arg")
+            print(colored("You didn't specify the --vulns arg", 
+                          "red", attrs=["bold"]))
     for vv in verified_vulns_results:
         print(vv)
 
@@ -166,9 +173,9 @@ if __name__ == "__main__":
                     addrs.append(ip.strip("\n"))
             the_money = shoMe(addrs, all_headers, args.hist, args.vulns)
             if (args.outfile != None):
-                print("Writing results to " + args.outfile)
+                print(colored("Writing results to " + args.outfile, "cyan", attrs=["bold"]))
                 write_results(the_money, args.outfile)
-                print("Results written to " + args.outfile)
+                print(colored("Results written to " + args.outfile, "green", attrs=["bold"]))
             else:
                 print_results(the_money)
         else:
@@ -188,9 +195,9 @@ if __name__ == "__main__":
                     addrs.append(ip.strip())
             the_money = shoMe(addrs, args.headers, args.hist, args.vulns)
             if (args.outfile != None):
-                print("Writing results to " + args.outfile)
+                print(colored("Writing results to " + args.outfile, "magenta", attrs=["bold"]))
                 write_results(the_money, args.outfile)
-                print("Results written to " + args.outfile)
+                print(colored("Results written to " + args.outfile, "green", attrs=["bold"]))
             else:
                 print_results(the_money)
         else:
