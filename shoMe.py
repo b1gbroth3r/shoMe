@@ -8,7 +8,7 @@ import shodan
 from termcolor import colored
 
 
-API_KEY = "5AgRK7vAvikHcvTdhX7i2KsyTqpmQP5A"
+API_KEY = "ENTER API KEY HERE"
 # TODO: Replace all prints with log
 
 
