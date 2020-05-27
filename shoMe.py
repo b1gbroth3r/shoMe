@@ -9,8 +9,15 @@ from termcolor import colored
 
 
 API_KEY = "ENTER API KEY HERE"
-# TODO: Replace all prints with log
 
+def get_path():
+    current_directory = getcwd()
+    os_type = platform.system()
+    if os_type == "Darwin" or os_type == "Linux":
+        path = current_directory + '/'
+    else:
+        path = current_directory + "\\"
+    return path
 
 def load_all_headers():
     header_list = []
@@ -136,24 +143,24 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         prog="shoMe.py", description="Script to parse Shodan data",
         formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("--IPs", nargs="*", dest="IPs",
+    parser.add_argument("-i", "--IPs", nargs="*", dest="IPs",
                         help="IP Addresses to scan.")
-    parser.add_argument("--ip-file", dest="ipfile",
+    parser.add_argument("-if", "--ip-file", dest="ipfile",
                         help="File containing IPs delimited by a newline")
-    parser.add_argument("--header", nargs="*", dest="headers",
+    parser.add_argument("-hr", "--header", nargs="*", dest="headers",
                         help="Server headers to look for.")
-    parser.add_argument("--all-headers", dest="allheads",
+    parser.add_argument("-ah", "--all-headers", dest="allheads",
                         action="store_true",
                         help="Load and search for all headers")
-    parser.add_argument("--vulns", dest="vulns", default=False, 
+    parser.add_argument("-V", "--vulns", dest="vulns", default=False, 
                         action="store_true",
                         help="Includes verified vulns associated with IPs")
-    parser.add_argument("--history", dest="hist", default=False,
+    parser.add_argument("-H", "--history", dest="hist", default=False,
                         action="store_true",
                         help="Option to include historical data")
-    parser.add_argument("--outfile", dest="outfile",
+    parser.add_argument("-o", "--outfile", dest="outfile",
                         help="File to write results to")
-    parser.add_argument("--verbose", dest="verb", action="store_true",
+    parser.add_argument("-v", "--verbose", dest="verb", action="store_true",
                         help="Toggle on verbose output, not implemented yet")
 
     args = parser.parse_args()
@@ -173,9 +180,12 @@ if __name__ == "__main__":
                     addrs.append(ip.strip("\n"))
             the_money = shoMe(addrs, all_headers, args.hist, args.vulns)
             if (args.outfile != None):
-                print(colored("Writing results to " + args.outfile, "cyan", attrs=["bold"]))
+                path = get_path()
+                print(colored("Writing results to " + path + args.outfile, 
+                              "cyan", attrs=["bold"]))
                 write_results(the_money, args.outfile)
-                print(colored("Results written to " + args.outfile, "green", attrs=["bold"]))
+                print(colored("Results written to " + path +  args.outfile, 
+                              "green", attrs=["bold"]))
             else:
                 print_results(the_money)
         else:
@@ -195,9 +205,12 @@ if __name__ == "__main__":
                     addrs.append(ip.strip())
             the_money = shoMe(addrs, args.headers, args.hist, args.vulns)
             if (args.outfile != None):
-                print(colored("Writing results to " + args.outfile, "magenta", attrs=["bold"]))
+                path = get_path()
+                print(colored("Writing results to " + path + args.outfile, 
+                              "magenta", attrs=["bold"]))
                 write_results(the_money, args.outfile)
-                print(colored("Results written to " + args.outfile, "green", attrs=["bold"]))
+                print(colored("Results written to " + path + args.outfile, 
+                              "green", attrs=["bold"]))
             else:
                 print_results(the_money)
         else:
