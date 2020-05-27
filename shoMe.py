@@ -9,6 +9,8 @@ from termcolor import colored
 
 
 API_KEY = "ENTER API KEY HERE"
+RAISE_EYEBROW = [21,23,135,139,161,389,445,1433,1434,1521,1830,3306,3389,
+                 5432,27017]
 
 def get_path():
     current_directory = getcwd()
@@ -131,7 +133,10 @@ def shoMe(ip_addresses, headers, history, vulns):
             ret += "; Ports: "
             p_ = info["ports"]
             for port in p_:
-                ret += str(port) + ", "
+                if port in RAISE_EYEBROW:
+                    ret += colored(str(port), "cyan", attrs=["bold"]) + ", "
+                else:
+                    ret += str(port) + ", "
             ip_port_info = ret[:-2]
             ips_and_ports.append(ip_port_info)
             info = None
