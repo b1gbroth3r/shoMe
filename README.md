@@ -45,26 +45,27 @@ Verified Vulnerabilities:
 ```
 
 ```txt
-usage: shoMe.py [-h] [--IPs [IPS [IPS ...]]] [--ip-file IPFILE] [
-                --header [HEADERS [HEADERS ...]]] [--all-headers ALLHEADS] 
-                [--vulns VULNS] [--history HIST] [--outfile OUTFILE]
+usage: shoMe.py [-h] [-i [IPS [IPS ...]]] [-if IPFILE] [-hr [HEADERS [HEADERS ...]]] [-ah] [-V] [-H] [-o OUTFILE] [-v]
 
 Script to parse Shodan data
 
 optional arguments:
   -h, --help            show this help message and exit
-  --IPs [IPS [IPS ...]]
+  -i [IPS [IPS ...]], --IPs [IPS [IPS ...]]
                         IP Addresses to scan.
-  --ip-file IPFILE      File containing IPs delimited by a newline
-  --header [HEADERS [HEADERS ...]]
+  -if IPFILE, --ip-file IPFILE
+                        File containing IPs delimited by a newline
+  -hr [HEADERS [HEADERS ...]], --header [HEADERS [HEADERS ...]]
                         Server headers to look for.
-  --all-headers         Load and search for all headers
-  --vulns               Includes verified vulns associated with IPs
-  --history             Option to include historical data
-  --outfile OUTFILE     File to write results to
-  --verbose             Toggle on verbose output, not implemented yet
+  -ah, --all-headers    Load and search for all headers
+  -V, --vulns           Includes verified vulns associated with IPs
+  -H, --history         Option to include historical data
+  -o OUTFILE, --outfile OUTFILE
+                        File to write results to
+  -v, --verbose         Toggle on verbose output, not implemented yet
 ```
 
 __Upcoming Additions__:
 
 - [ ] Write output to structured file to organize data into tables
+- [ ] Compare historical to current data
